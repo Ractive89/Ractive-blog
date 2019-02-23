@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no" name="viewport">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="description" content="有梦想 | 有热情">
+    <meta name="author" content="Ractive">
+    <meta name="keywords" content="Ractive 编程 数字媒体 交互艺术 C/C++ Python 人工智能 C4d">
+    <title>堆排序 ~ Ractive&#39;s Blog</title>
+    <link rel="stylesheet" href="/css/Material_Icons.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/main.css">
+    
+        <link rel="stylesheet" href="/css/post.css">
+        
+            <link rel="stylesheet" href="/css/Prettify/tomorrow-night-eighties.min.css">
+        
+    
+</head>
+
+<body class=" sidebar-collapse">
+<nav class="navbar navbar-transparent navbar-color-on-scroll fixed-top navbar-expand-lg" color-on-scroll="100" id="sectionsNav">
+    <div class="container">
+        <div class="navbar-translate">
+            <a class="navbar-brand" href="/">
+                Ractive&#39;s Blog</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ml-auto">
+                    
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" href="/archives/">
+                                    archives
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" href="/about/">
+                                    about
+                                </a>
+                            </li>
+                        
+                    
+                    
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title data-placement="bottom" href="https://github.com/Ractive89" target="_blank" data-original-title="See me here">
+                                    <i class="fa fa-github"></i>
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" rel="tooltip" title data-placement="bottom" href="https://twitter.com/" target="_blank" data-original-title="See me here">
+                                    <i class="fa fa-twitter"></i>
+                                </a>
+                            </li>
+                        
+                    
+                </ul>
+            </div>
+    </div>
+</nav>
+    
+  <div class="page-header header-filter" data-parallax="false" style="background-image: url('/img/post-banner.jpg'); height: 70vh;">
+    
+      <div class="container">
+        <h1 class="title text-center post_title">堆排序</h1>
+        <p class="text-center"><b>星期日, 二月 24日 2019, 2:04 凌晨</b></p>
+      </div>
+    
+  </div>
+
+  
+  
+  
+    <div class="row" style="margin: 0 0 0; z-index: 999;">
+  <div class="col-md-8 offset-md-1">
+    <div class="main main-raised">
+      <div class="container">
+        <div class="section">
+          <div class="post_content">
+              <h2 id="堆排序"><a href="#堆排序" class="headerlink" title="堆排序"></a>堆排序</h2><blockquote>
+<p>堆排序（英语：Heapsort）是指利用堆这种数据结构所设计的一种排序算法。<br>堆是一个近似完全二叉树的结构，并同时满足堆积的性质：即子结点的键值或索引总是小于（或者大于）它的父节点。</p>
+</blockquote>
+<h3 id="堆排序复杂度分析"><a href="#堆排序复杂度分析" class="headerlink" title="堆排序复杂度分析"></a>堆排序复杂度分析</h3><p>堆排序，它的运行时间主要是消耗在构建堆和在重建堆时的反复筛选上。</p>
+<p>在构建堆的过程，因为我们是从完全二叉树最下层的非叶子结点开始构建的，将它与其孩子结点进行比较和有必要的互换，对于每个非叶子结点来说，其实最多2次比较和互换，故初始化堆的时间复杂度为O(n)。</p>
+<p>在正式排序的时候，第i次取堆顶记录和重建堆需要O(logi)的时间（完全二叉树的某个结点到根结点的距离为log2i+1）,并且需要取n-1次堆顶记录，因此重建堆的时间复杂度为O(nlogn)。</p>
+<p>所以总的来说，堆排序的时间复杂度为O(nlogn)。<br>由于堆排序对元素记录的排序状态不敏感，因此它无论最好，最坏，和平均时间复杂度均为O(nlogn)。<br><br></p>
+<h3 id="实现代码"><a href="#实现代码" class="headerlink" title="实现代码"></a>实现代码</h3><p>首先建立小顶堆。<br>如果子元素比父元素小那就交互元素。<br><br></p>
+<pre><code class="cpp">int min_Heap_Fix(int *arr, int index, int len)
+{
+    int left = index * 2 + 1;
+    int right = index * 2 + 2;
+    int min = left;
+    if (left &gt;= len)
+        return 0;
+
+    if (right &gt;= len)
+        ;
+    else
+    {
+        if (arr[left] &gt; arr[right])
+        {
+            min = right;
+        }
+    }
+
+    if (arr[min] &gt;= arr[index])
+        return 0;
+
+    swap(&amp;arr[min], &amp;arr[index]);
+
+    min_Heap_Fix(arr, min, len);
+
+    return 0;
+}
+</code></pre>
+<p><br><br>因为以数组存放树，所以最后一个父节点在len/2-1。<br><br></p>
+<pre><code class="cpp">int min_Heap(int *arr, int len)
+{
+    int i;
+    for (i = len / 2 - 1; i &gt;= 0; i--)
+    {
+        min_Heap_Fix(arr, i, len);
+    }
+    return 0;
+}
+</code></pre>
+<p><br><br>利用小顶堆性质排序，把头元素放到最后，再对len-1个元素继续建堆，排序。<br><br></p>
+<pre><code class="cpp">int heap_Sort(int *arr, int len)
+{
+    min_Heap(arr, len);
+    int i;
+    for (i = len; i &gt; 0; i--)
+    {
+        swap(&amp;arr[0], &amp;arr[i - 1]);
+        //min_Heap_Fix(arr, 0,i+1);
+        min_Heap(arr,i-1);
+
+
+    }
+    return 0;
+}
+
+</code></pre>
+
+          </div>
+          <br><br>
+          <div>
+              <p>
+                       
+                      <span class="badge badge-default">#&nbsp;编程</span>
+                      &nbsp;
+                       
+                      <span class="badge badge-default">#&nbsp;算法</span>
+                      &nbsp;
+                       
+                      <span class="badge badge-default">#&nbsp;C/C++</span>
+                      &nbsp;
+                       
+                      <span class="badge badge-default">#&nbsp;树</span>
+                      &nbsp;
+                      
+              </p>
+          </div>
+        </div>
+      </div>  
+    </div>
+  </div>
+  <!-- TOC -->
+  
+  <div id="toc">
+    <p class="toc-title"><i class="material-icons" style="vertical-align:middle">toc</i>Toc:</p> 
+    <div id="tocbot"></div>
+  </div>
+
+</div>
+
+
+<br>
+<!-- Comments -->
+<div class="comments" id="comments">
+
+    
+    <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    <script>               
+        var disqus_shortname = '';
+        var disqus_config = function () {
+            this.page.url = 'https://ractive89.github.io/Ractive-blog/2019/02/24/堆排序/'; 
+            this.page.identifier = '/2019/02/24/堆排序/';
+        };
+        (function() { 
+            var d = document, s = d.createElement('script');
+            s.type = 'text/javascript';
+            s.src = '//'+disqus_shortname+'.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>                                
+</div>
+
+</div>
+  
+
+<footer class="footer footer-default">
+        <div class="container">
+          <div class="float-left" style="padding: 15px 0;">
+              www.ractive.site
+          </div>
+          <div class="copyright float-right">
+            &copy;
+            <script>
+              document.write(new Date().getFullYear())
+            </script>&nbsp;<a href="https://hexo.io/zh-cn/" target="_blank">HEXO</a>&nbsp;<i class="material-icons">favorite_border</i>
+            <a href="https://github.com/invom/Material-T" target="_blank">Material-T</a>
+          </div>
+        </div>
+</footer>
+      <!--   Core JS Files   -->
+      <script src="/js/core/jquery.min.js?v=3.2.1"></script>
+      <script src="/js/main.js"></script>
+      <script src="/js/core/popper.min.js"></script>
+      <script src="/js/core/bootstrap-material-design.min.js"></script>
+      <script src="/js/plugins/moment.min.js"></script>
+      <!-- Control Center for Material Kit: parallax effects, scripts for the example pages etc -->
+      <script src="/js/material-kit.min.js?v=2.0.5"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+        <script src="/js/post.js"></script>
+        <script src="/js/plugins/prettify.js"></script>
+        <script>
+            $(document).ready(function(){
+                $('pre').addClass('prettyprint linenums');
+                prettyPrint();
+            })
+        </script>
+      
+</body>
+</html>
