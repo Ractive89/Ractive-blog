@@ -102,7 +102,7 @@
       <div class="container">
         <div class="section">
           <div class="post_content">
-              <h2 id="有效的数独"><a href="#有效的数独" class="headerlink" title="有效的数独"></a>有效的数独</h2><p><br><br>判断一个 9x9 的数独是否有效。只需要<em>根据以下规则</em>，验证已经填入的数字是否有效即可。<br><br></p>
+              <h2 id="有效的数独"><a href="#有效的数独" class="headerlink" title="有效的数独"></a>有效的数独</h2><p>判断一个 9x9 的数独是否有效。只需要<em>根据以下规则</em>，验证已经填入的数字是否有效即可。<br><br></p>
 <ol>
 <li>数字 1-9 在每一行只能出现一次。</li>
 <li>数字 1-9 在每一列只能出现一次。</li>
@@ -122,45 +122,57 @@
 </ul>
 <h4 id="方法：一次迭代"><a href="#方法：一次迭代" class="headerlink" title="方法：一次迭代"></a>方法：一次迭代</h4><p>首先，让我们来讨论下面两个问题：<br><br></p>
 <ul>
-<li>如何枚举子数独？<br>可以使用<code>box_index = (row / 3) * 3 + columns / 3</code>，其中<code> / </code>是整数除法。<br><br><br><img src="https://leetcode-cn.com/articles/Figures/36/36_boxes_2.png" alt="picture"><br><br></li>
-<li>如何确保行 / 列 / 子数独中没有重复项？<blockquote>
-<p>可以利用 value -&gt; count 哈希映射来跟踪所有已经遇到的值。<br><br></p>
-</blockquote>
-<h4 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h4><br><br>遍历数独。<br>检查看到每个单元格值是否已经在当前的行 / 列 / 子数独中出现过：<br>如果出现重复，返回 false。<br>如果没有，则保留此值以进行进一步跟踪。<br>返回 true。<br><br><h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><br><br><code>`</code>cpp  </li>
+<li>如何枚举子数独？</li>
 </ul>
-<p>class Solution<br>{<br>  public:<br>    bool isValidSudoku(vector&lt;vector<char>&gt; &amp;board)<br>    {<br>        // 初始化数据</char></p>
-<pre><code>    map&lt;int, int&gt;* rows=new map&lt;int, int&gt;[9];
-    map&lt;int, int&gt;* columns=new map&lt;int, int&gt;[9];
-    map&lt;int, int&gt;* boxes=new map&lt;int, int&gt;[9];
-
-    // 遍历
-    for (int i = 0; i &lt; 9; i++)
+<p>可以使用<code>box_index = (row / 3) * 3 + columns / 3</code>，其中<code> / </code>是整数除法。<br><br><br><img src="https://leetcode-cn.com/articles/Figures/36/36_boxes_2.png" alt="picture"><br><br></p>
+<ul>
+<li>如何确保行 / 列 / 子数独中没有重复项？<blockquote>
+<p>可以利用 value -&gt; count 哈希映射来跟踪所有已经遇到的值。</p>
+</blockquote>
+</li>
+</ul>
+<p><br></p>
+<h4 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h4><p>遍历数独。<br>检查看到每个单元格值是否已经在当前的行 / 列 / 子数独中出现过：<br>如果出现重复，返回 false。<br>如果没有，则保留此值以进行进一步跟踪。<br>返回 true。<br><br></p>
+<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><pre><code class="cpp">
+class Solution
+{
+  public:
+    bool isValidSudoku(vector&lt;vector&lt;char&gt;&gt; &amp;board)
     {
-        for (int j = 0; j &lt; 9; j++)
+        // 初始化数据
+
+        map&lt;int, int&gt;* rows=new map&lt;int, int&gt;[9];
+        map&lt;int, int&gt;* columns=new map&lt;int, int&gt;[9];
+        map&lt;int, int&gt;* boxes=new map&lt;int, int&gt;[9];
+
+        // 遍历
+        for (int i = 0; i &lt; 9; i++)
         {
-            char num = board[i][j];
-            if (num != &#39;.&#39;)
+            for (int j = 0; j &lt; 9; j++)
             {
-                int n = (int)num;
-                int box_index = (i / 3) * 3 + j / 3;
+                char num = board[i][j];
+                if (num != &#39;.&#39;)
+                {
+                    int n = (int)num;
+                    int box_index = (i / 3) * 3 + j / 3;
 
-                rows[i][n]++;
-                columns[j][n]++;
-                boxes[box_index][n]++;
+                    rows[i][n]++;
+                    columns[j][n]++;
+                    boxes[box_index][n]++;
 
-                if (rows[i][n] &gt; 1 || columns[j][n] &gt; 1 || boxes[box_index][n] &gt; 1)
-                    return false;
+                    if (rows[i][n] &gt; 1 || columns[j][n] &gt; 1 || boxes[box_index][n] &gt; 1)
+                        return false;
+                }
             }
         }
+
+        return true;
     }
+};
 
-    return true;
-}
-</code></pre><p>};</p>
-<pre><code>  &lt;br&gt;
-然后我又优化了一次，把map改成bool
-```cpp
-
+</code></pre>
+<p><br><br>然后我又优化了一次，把map改成bool</p>
+<pre><code class="cpp">
 class Solution
 {
   public:
@@ -196,6 +208,7 @@ class Solution
     }
 };
 </code></pre>
+
           </div>
           <br><br>
           <div>
