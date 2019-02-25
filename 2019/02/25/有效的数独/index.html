@@ -114,7 +114,7 @@
 <li>给定数独序列只包含数字 1-9 和字符 ‘.’ 。</li>
 <li>给定数独永远是 9x9 形式的。</li>
 </ul>
-<h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><h4 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h4><p>一个简单的解决方案是遍历该 9 x 9 数独<strong>三</strong>次，以确保：</p>
+<h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><h4 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h4><p>一个简单的解决方案是<strong>遍历该 9 x 9 数独三次</strong>，以确保：</p>
 <ul>
 <li>行中没有重复的数字。</li>
 <li>列中没有重复的数字。</li>
@@ -171,7 +171,10 @@ class Solution
 };
 
 </code></pre>
-<p><br><br>然后我又优化了一次，把map改成bool</p>
+<p><br></p>
+<ul>
+<li>然后我又优化了一次，把map改成bool</li>
+</ul>
 <pre><code class="cpp">
 class Solution
 {
@@ -179,27 +182,19 @@ class Solution
     bool isValidSudoku(vector&lt;vector&lt;char&gt;&gt; &amp;board)
     {
 
-        bool rows[82]{};
-        bool columns[82]{};
-        bool boxes[82]{};
+        bool rows[82]{},columns[82]{},boxes[82]{};
         for (int i = 0; i &lt; 9; i++)
         {
             for (int j = 0; j &lt; 9; j++)
             {
-                if (board[i][j] == &#39;.&#39;)
-                    continue;
+                if (board[i][j] == &#39;.&#39;){
+                    int n = int(board[i][j]) - 48;
+                    int box_index = (i / 3) * 3 + j / 3;
 
-                int n = int(board[i][j]) - 48;
-
-                int box_index = (i / 3) * 3 + j / 3;
-
-                if (rows[i * 9 + n] || columns[j * 9 + n] || boxes[box_index * 9 + n])
-                    return false;
-                else
-                {
-                    rows[i * 9 + n] = true;
-                    columns[j * 9 + n] = true;
-                    boxes[box_index * 9 + n] = true;
+                    if (rows[i * 9 + n] || columns[j * 9 + n] || boxes[box_index * 9 + n])
+                        return false;
+                    else
+                        rows[i * 9 + n] = columns[j * 9 + n] = boxes[box_index * 9 + n] = true;
                 }
             }
         }
